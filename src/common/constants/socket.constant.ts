@@ -1,3 +1,3 @@
-const SOCKET_URL = 'http://localhost:3005';
+const SOCKET_URL = "trellocopyserver-production.up.railway.app";
 
 export { SOCKET_URL };
