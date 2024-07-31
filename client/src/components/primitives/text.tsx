@@ -1,0 +1,54 @@
+import { ChangeEvent, useEffect, useState } from "react";
+
+import { useComponentVisible } from "../../hooks/useComponentVisible";
+import { BasicText } from "./styled/basic-text";
+import { TextContainer } from "./styled/text-container";
+import { TextInput } from "./styled/text-input";
+
+type Props = {
+  text: string;
+  onChange: (value: string, cardId: string) => void;
+  cardId: string;
+};
+
+export const Text = ({ onChange, text, cardId }: Props) => {
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
+  const [value, setValue] = useState(text);
+
+  useEffect(() => {
+    if (!isComponentVisible) {
+      setValue(text);
+    }
+  }, [text]);
+
+  const onEdit = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+  };
+
+  const onBlur = () => {
+    setIsComponentVisible(false);
+    onChange(value, cardId);
+  };
+
+  return (
+    <TextContainer className="text-container" ref={ref}>
+      {isComponentVisible ? (
+        <TextInput
+          className="text-input"
+          value={value}
+          onChange={onEdit}
+          onBlur={onBlur}
+          autoFocus={isComponentVisible}
+        />
+      ) : (
+        <BasicText
+          className="text-content"
+          onClick={() => setIsComponentVisible(true)}
+        >
+          {value}
+        </BasicText>
+      )}
+    </TextContainer>
+  );
+};
